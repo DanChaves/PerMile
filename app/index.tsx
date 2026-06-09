@@ -1,10 +1,57 @@
-import { StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function HomeScreen() {
+  const [gasPrice, setGasPrice] = useState("");
+  const [mpg, setMpg] = useState("");
+  const [miles, setMiles] = useState("");
+
+  const price = Number(gasPrice);
+  const fuelMpg = Number(mpg);
+  const tripMiles = Number(miles);
+
+  const costPerMile = price && fuelMpg ? price / fuelMpg : 0;
+  const tripCost = costPerMile * tripMiles;
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Hello World</Text>
-      <Text style={styles.subtitle}>Put stuff here.</Text>
+      <Text style={styles.title}>PerMile</Text>
+      <Text style={styles.subtitle}>
+        Calculate what your drive really costs.
+      </Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Gas price per gallon"
+        keyboardType="numeric"
+        value={gasPrice}
+        onChangeText={setGasPrice}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Your car MPG"
+        keyboardType="numeric"
+        value={mpg}
+        onChangeText={setMpg}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Trip miles"
+        keyboardType="numeric"
+        value={miles}
+        onChangeText={setMiles}
+      />
+
+      <View style={styles.resultBox}>
+        <Text>Cost per mile: ${costPerMile.toFixed(2)}</Text>
+        <Text>Trip cost: ${tripCost.toFixed(2)}</Text>
+      </View>
+
+      <Pressable style={styles.button}>
+        <Text style={styles.buttonText}>Calculate</Text>
+      </Pressable>
     </View>
   );
 }
@@ -12,17 +59,41 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
     padding: 24,
+    justifyContent: "center",
     backgroundColor: "#fff",
   },
   title: {
-    fontSize: 32,
-    fontWeight: "700",
+    fontSize: 36,
+    fontWeight: "bold",
+    marginBottom: 8,
   },
   subtitle: {
-    marginTop: 8,
     fontSize: 16,
+    marginBottom: 24,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 14,
+    borderRadius: 10,
+    marginBottom: 12,
+  },
+  resultBox: {
+    padding: 16,
+    backgroundColor: "#eee",
+    borderRadius: 10,
+    marginTop: 8,
+    marginBottom: 16,
+  },
+  button: {
+    backgroundColor: "black",
+    padding: 16,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
   },
 });
