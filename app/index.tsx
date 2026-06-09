@@ -2,23 +2,35 @@ import { useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function HomeScreen() {
+  // logic
   const [gasPrice, setGasPrice] = useState("");
   const [mpg, setMpg] = useState("");
   const [miles, setMiles] = useState("");
+  const [gasTaxPercentage, setGasTax] = useState("");
 
+  const tax = Number(gasTaxPercentage);
   const price = Number(gasPrice);
   const fuelMpg = Number(mpg);
   const tripMiles = Number(miles);
 
-  const costPerMile = price && fuelMpg ? price / fuelMpg : 0;
+  const costPerMile =
+    price && fuelMpg ? (price / fuelMpg) * (1 - tax * 0.01) : 0;
   const tripCost = costPerMile * tripMiles;
-
+  // visual layout
   return (
     <View style={styles.container}>
       <Text style={styles.title}>PerMile</Text>
       <Text style={styles.subtitle}>
         Calculate what your drive really costs.
       </Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="tax %"
+        keyboardType="numeric"
+        value={gasTaxPercentage}
+        onChangeText={setGasTax}
+      />
 
       <TextInput
         style={styles.input}
