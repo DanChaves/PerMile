@@ -1,50 +1,68 @@
-# Welcome to your Expo app 👋
+# PerMile 🚗🚙🚓 ⛽
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+PerMile is a mobile app that estimates the fuel cost of a trip based on vehicle fuel efficiency, distance, and local gas prices.
 
-## Get started
+The project is being developed as a practical way to learn React Native, TypeScript, SQL, API integration, and mobile app deployment.
 
-1. Install dependencies
+## Project Status
 
-   ```bash
-   npm install
-   ```
+PerMile is currently in early development and is not yet available on the Google Play Store.
 
-2. Start the app
+## Planned Features
 
-   ```bash
-   npx expo start
-   ```
+- Calculate estimated fuel cost per mile
+- Calculate total fuel cost for a trip
+- Select a vehicle by year, make, model, and configuration
+- Automatically retrieve EPA fuel-efficiency data
+- Save frequently used vehicles
+- Store previous calculations
+- Support manual MPG entry
+- Handle loading, offline, and API error states
 
-In the output, you'll find options to open the app in a
+## Tech
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- React Native
+- Expo
+- TypeScript
+- SQLite
+- FuelEconomy.gov Web Services
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Project Goals
 
-## Get a fresh project
+The primary goals of PerMile are to:
 
-When you're ready, run:
+- Build and publish a complete mobile application
+- Practice component-based interface design
+- Integrate an external REST API
+- Design and query a local SQL database
+- Learn mobile testing and deployment
+- Create a polished portfolio project
 
-```bash
-npm run reset-project
-```
+## Planned User Flow
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+1. Select or enter a vehicle.
+2. Enter the trip distance and current gas price.
+3. Review the estimated fuel usage and trip cost.
+4. Optionally save the vehicle and calculation.
 
-## Learn more
+## Roadmap
 
-To learn more about developing your project with Expo, look at the following resources:
+- [x] Create the initial trip-cost calculator
+- [x] Add EPA vehicle selection
+- [ ] Add SQLite persistence
+- [ ] Save calculation history
+- [ ] Improve accessibility and visual design
+- [ ] Add automated tests
+- [ ] Prepare the Google Play Store release
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Data Source
 
-## Join the community
+Vehicle fuel-efficiency information is provided by the
+[FuelEconomy.gov Web Services](https://www.fueleconomy.gov/feg/ws/index.shtml).
 
-Join our community of developers creating universal apps.
+Fuel-cost results are estimates and may differ from real-world costs due to
+driving conditions, vehicle condition, fuel prices, and driving behavior.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## License
+
+This project is currently intended for educational and portfolio purposes.
