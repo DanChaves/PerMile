@@ -6,6 +6,7 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from "react-native";
 
@@ -20,7 +21,7 @@ import {
 } from "@/services/fuel-economy-api";
 
 type VehicleSelectorProps = {
-  onVehicleSelected: (vehicle: VehicleDetails) => void;
+  onVehicleSelected: (vehicle: VehicleDetails, configuration: string) => void;
 };
 
 type PickerField = "year" | "make" | "model" | "configuration";
@@ -39,6 +40,7 @@ export function VehicleSelector({
   const [configurations, setConfigurations] = useState<VehicleOption[]>([]);
 
   const [activeField, setActiveField] = useState<PickerField>();
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -65,6 +67,16 @@ export function VehicleSelector({
     model: models,
     configuration: configurations,
   };
+
+  const activeOptions = activeField ? optionsByField[activeField] : [];
+  const filteredOptions = activeOptions.filter((option) =>
+    option.label.toLowerCase().includes(searchQuery.trim().toLowerCase()),
+  );
+
+  function openField(field: PickerField) {
+    setSearchQuery("");
+    setActiveField(field);
+  }
 
   async function chooseOption(option: VehicleOption) {
     if (!activeField) {
@@ -99,7 +111,7 @@ export function VehicleSelector({
         );
       } else if (field === "configuration") {
         setConfiguration(option);
-        onVehicleSelected(await getVehicleDetails(option.value));
+        onVehicleSelected(await getVehicleDetails(option.value), option.label);
       }
     } catch {
       setError("Something went wrong while loading vehicle data. Please retry.");
@@ -118,25 +130,25 @@ export function VehicleSelector({
       <SelectorButton
         label="Model year"
         value={year?.label}
-        onPress={() => setActiveField("year")}
+        onPress={() => openField("year")}
       />
       <SelectorButton
         label="Make"
         value={make?.label}
         disabled={!year}
-        onPress={() => setActiveField("make")}
+        onPress={() => openField("make")}
       />
       <SelectorButton
         label="Model"
         value={model?.label}
         disabled={!make}
-        onPress={() => setActiveField("model")}
+        onPress={() => openField("model")}
       />
       <SelectorButton
         label="Engine / configuration"
         value={configuration?.label}
         disabled={!model}
-        onPress={() => setActiveField("configuration")}
+        onPress={() => openField("configuration")}
       />
 
       {loading && <ActivityIndicator style={styles.status} />}
@@ -160,9 +172,20 @@ export function VehicleSelector({
               </Pressable>
             </View>
 
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search"
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
+
             <FlatList
-              data={activeField ? optionsByField[activeField] : []}
+              data={filteredOptions}
               keyExtractor={(item) => item.value}
+              keyboardShouldPersistTaps="handled"
+              ListEmptyComponent={
+                <Text style={styles.emptyText}>No matching options found.</Text>
+              }
               renderItem={({ item }) => (
                 <Pressable
                   style={styles.option}
@@ -198,13 +221,13 @@ function SelectorButton({
       disabled={disabled}
       onPress={onPress}
     >
-      <View>
+      <View style={styles.selectorText}>
         <Text style={styles.selectorLabel}>{label}</Text>
         <Text style={value ? styles.selectorValue : styles.placeholder}>
           {value ?? `Select ${label.toLowerCase()}`}
         </Text>
       </View>
-      <Text style={styles.chevron}>›</Text>
+      <Text style={styles.chevron}>&gt;</Text>
     </Pressable>
   );
 }
@@ -238,6 +261,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#f3f3f3",
     opacity: 0.55,
   },
+  selectorText: {
+    flex: 1,
+    paddingRight: 12,
+  },
   selectorLabel: {
     color: "#666",
     fontSize: 12,
@@ -253,7 +280,8 @@ const styles = StyleSheet.create({
   },
   chevron: {
     color: "#555",
-    fontSize: 28,
+    fontSize: 20,
+    fontWeight: "700",
   },
   status: {
     marginTop: 4,
@@ -293,6 +321,19 @@ const styles = StyleSheet.create({
     color: "#1769aa",
     fontSize: 16,
     fontWeight: "600",
+  },
+  searchInput: {
+    borderColor: "#d8d8d8",
+    borderRadius: 10,
+    borderWidth: 1,
+    fontSize: 16,
+    marginTop: 14,
+    padding: 12,
+  },
+  emptyText: {
+    color: "#666",
+    paddingVertical: 24,
+    textAlign: "center",
   },
   option: {
     borderBottomColor: "#eee",
